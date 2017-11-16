@@ -155,19 +155,6 @@
 
 ;;--------------------------------------------------------------------------------
 
-;;https://emacs.cafe/emacs/javascript/setup/2017/05/09/emacs-setup-javascript-2.html
-;;(require 'company-mode)
-;; (require 'company-tern)
-;; (add-to-list 'company-backends 'company-tern)
-;; (add-hook 'js2-mode-hook (lambda ()
-;;                            (tern-mode)
-;;                            (company-mode)))
-                           
-;; ;; Disable completion keybindings, as we use xref-js2 instead
-;; (define-key tern-mode-keymap (kbd "M-.") nil)
-;; (define-key tern-mode-keymap (kbd "M-,") nil)
-
-
 ;; javascript and json
 ;; https://truongtx.me/2014/02/23/set-up-javascript-development-environment-in-emacs/
 (setq js-indent-level 2)
@@ -178,36 +165,7 @@
 (add-hook 'js2-mode-hook 'ac-js2-mode)
 (setq js2-highlight-level 2)
 
-
-
-;;tern
-;;https://truongtx.me/2014/04/20/emacs-javascript-completion-and-refactoring/
-;;http://ternjs.net/doc/demo/#simple
-;;(add-hook 'js-mode-hook (lambda () (tern-mode t)))
-;; (eval-after-load 'tern
-;; '(progn
-;;   (require 'tern-auto-complete)
-;;   (tern-ac-setup)))
 ;; ---------- end javascript ----------------------------------------
-
-
-;;--------------------------------------------------------------------------------
-;; paredit (balance paranthesis, javascript etc)
-;; https://truongtx.me/2014/02/22/emacs-using-paredit-with-non-lisp-mode/
-;;(defun my-paredit-nonlisp ()
-;;  "Turn on paredit mode for non-lisps."
-;;  (interactive)
-;; (set (make-local-variable 'paredit-space-for-delimiter-predicates)
-;;     '((lambda (endp delimiter) nil)))
-;;(paredit-mode 1) )
-;;(add-hook 'js-mode-hook 'my-paredit-nonlisp) ;use with the above function
-;;(add-hook 'js-mode-hook 'esk-paredit-nonlisp) ;for emacs starter kit
-
-;;(define-key js-mode-map "{" 'paredit-open-curly)
-;;(define-key js-mode-map "}" 'paredit-close-curly-and-newline)
-
-;;--------------------------------------------------------------------------------
-
 
 
 ;;--------------------------------------------------------------------------------
@@ -239,17 +197,6 @@
 
 
 ;;--------------------------------------------------------------------------------
-;; SLIME and node-js and swank-js
-;;(add-to-list 'load-path "~/.emacs.d/slime")
-;;(add-to-list 'load-path "~/.emacs.d/slime-js")
-(setq inferior-lisp-program "/usr/local/bin/sbcl")
-(setq slime-contribs '(slime-fancy slime-repl slime-js ))
-;;(require 'slime)
-;;(require 'slime-js)
-(slime-setup '(slime-fancy slime-js))
-
-
-
 ;; swank-js settings
 
 (autoload 'js2-mode "js2-mode" nil t)
@@ -261,10 +208,6 @@
 ;;(load-file "~/.emacs.d/setup-slime-js.el")
 
 ;;--------------------------------------------------------------------------------
-
-
-(eval-after-load "vc-hooks"
-  '(define-key vc-prefix-map "=" 'ediff-revision))
 
 (setq ediff-split-window-function 'split-window-horizontally)
 

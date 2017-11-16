@@ -69,7 +69,7 @@
 (el-get 'sync)
 
 
-
+;;--------------------------------------------------------------------------------
 ;; indent org-mode
 (add-hook 'org-mode-hook
           (lambda ()
@@ -89,6 +89,16 @@
              "* TODO %?\n  %i\n  %a")
         ("j" "Journal" entry (file+datetree "~/org/journal.org")
              "* %?\nEntered on %U\n  %i\n  %a")))
+
+
+;; MObileOrg
+;;(setq org-directory "~/Dropbox/MobileOrg")
+(setq org-directory "~/Dropbox/GTD/org")
+(setq org-mobile-inbox-for-pull "~/Dropbox/GTD/org/from-mobile.org")
+(setq org-mobile-files (quote ("mobile.org")))
+(setq org-mobile-directory  "~/Dropbox/Apps/MobileOrg")
+
+;;--------------------------------------------------------------------------------
 
 ;; remap markdown global cycle from <S-iso-lefttab>
 (global-set-key (kbd "<S-tab>") 'markdown-shifttab)
@@ -113,6 +123,7 @@
 ;; (global-set-key (kbd "M-.") 'worklog  )
 ;; (global-set-key (kbd "M-m") 'backlog  )
 
+;;--------------------------------------------------------------------------------
 
 ;; xmllint format xml
 (defun xmllint ()
@@ -122,18 +133,7 @@
   )
 )
 
-
-
 (put 'downcase-region 'disabled nil)
-
-;; MObileOrg
-;;(setq org-directory "~/Dropbox/MobileOrg")
-(setq org-directory "~/Dropbox/GTD/org")
-(setq org-mobile-inbox-for-pull "~/Dropbox/GTD/org/from-mobile.org")
-(setq org-mobile-files (quote ("mobile.org")))
-(setq org-mobile-directory  "~/Dropbox/Apps/MobileOrg")
-
-
 
 
 ;; grails
@@ -160,9 +160,6 @@
              (require 'groovy-electric)
              (groovy-electric-mode)))
 
-
-
-
 ;; clojure
 (defvar my-packages '(starter-kit
                       starter-kit-lisp
@@ -181,9 +178,6 @@
 ;; regexp-builder
 (require 're-builder)
 ;;(setq reb-re-syntax ')
-
-
-
 
 
 

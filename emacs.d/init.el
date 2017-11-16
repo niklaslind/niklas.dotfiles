@@ -58,16 +58,16 @@
 
 
 ;; emacs package manager el-get-list-packages
-(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
-(setq el-get-user-package-directory "~/.emacs.d/packages.d/")
-(unless (require 'el-get nil t)
-  (with-current-buffer
-      (url-retrieve-synchronously
-       "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
-    (goto-char (point-max))
-    (eval-print-last-sexp)))
-(el-get 'sync)
-
+;; (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+;; (setq el-get-user-package-directory "~/.emacs.d/packages.d/")
+;; (unless (require 'el-get nil t)
+;;   (with-current-buffer
+;;       (url-retrieve-synchronously
+;;        "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
+;;     (goto-char (point-max))
+;;     (eval-print-last-sexp)))
+;; (el-get 'sync)
+;;; 
 
 ;;--------------------------------------------------------------------------------
 ;; indent org-mode
@@ -145,13 +145,8 @@
 
 (put 'upcase-region 'disabled nil)
 
-
-;; Speedbar in current 
-(require 'sr-speedbar)
-(setq speedbar-use-images nil)
-
-(color-theme-midnight)
-
+;;(color-theme-midnight)
+(load-theme 'dracula t)
 
 ;;--------------------------------------------------------------------------------
 
@@ -249,6 +244,10 @@
 ;;--------------------------------------------------------------------------------
 ;; Helm search short cuts
 
+(require 'helm-config) 
+(helm-mode 1)
+
+(global-set-key (kbd "M-x") 'helm-M-x)
 (global-set-key (kbd "M-s s") 'helm-multi-swoop-all)
 (global-set-key (kbd "M-s S") 'helm-swoop)
 (global-set-key (kbd "M-s l") 'helm-ls-git-ls)

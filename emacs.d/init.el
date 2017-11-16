@@ -135,44 +135,8 @@
 
 (put 'downcase-region 'disabled nil)
 
-
-;; grails
-(require 'grails-mode)
-(setq grails-mode t)
-(setq project-mode t)
-(add-to-list 'auto-mode-alist '("\.gsp$" . nxml-mode)) ; Use whatever mode you want for views.
-;; (project-load-all) ;does not work, Loads all saved projects. Recommended, but not required.
-
-
-;; groovy
-
 ;;; turn on syntax highlighting
 (global-font-lock-mode 1)
-
-;;; use groovy-mode when file ends in .groovy or has #!/bin/groovy at start
-(autoload 'groovy-mode "groovy-mode" "Major mode for editing Groovy code." t)
-(add-to-list 'auto-mode-alist '("\.groovy$" . groovy-mode))
-(add-to-list 'interpreter-mode-alist '("groovy" . groovy-mode))
-
-;;; make Groovy mode electric by default.
-(add-hook 'groovy-mode-hook
-          '(lambda ()
-             (require 'groovy-electric)
-             (groovy-electric-mode)))
-
-;; clojure
-(defvar my-packages '(starter-kit
-                      starter-kit-lisp
-                      starter-kit-bindings
-                      starter-kit-eshell
-                      clojure-mode
-                      clojure-test-mode
-                      nrepl))
-
-(dolist (p my-packages)
-(when (not (package-installed-p p))
-  (package-install p)))
-
 
 
 ;; regexp-builder

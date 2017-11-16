@@ -143,35 +143,12 @@
 (require 're-builder)
 ;;(setq reb-re-syntax ')
 
-
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes (quote ("30fe7e72186c728bd7c3e1b8d67bc10b846119c45a0f35c972ed427c45bacc19" default)))
- '(org-agenda-files (quote ("~/Dropbox/GTD/TODAY.org"))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 (put 'upcase-region 'disabled nil)
 
 
 ;; Speedbar in current 
 (require 'sr-speedbar)
 (setq speedbar-use-images nil)
-
-;; jade-mode https://github.com/brianc/jade-mode
-(add-to-list 'load-path "~/.emacs.d/custom/jade-mode")
-(require 'sws-mode)
-(require 'jade-mode)    
-(add-to-list 'auto-mode-alist '("\\.styl$" . sws-mode))
-(add-to-list 'auto-mode-alist '("\\.jade$" . jade-mode))
-
 
 (color-theme-midnight)
 
@@ -292,14 +269,6 @@
 (setq ediff-split-window-function 'split-window-horizontally)
 
 (server-start)
-
-;;--------------------------------------------------------------------------------
-;; tern javascript
-
-;; (add-to-list 'load-path "/Users/nli/.emacs.d/custom/tern")
-;; (autoload 'tern-mode "tern.el" nil t)
-;; (add-hook 'js-mode-hook (lambda () (tern-mode t)))
-
 
 ;;--------------------------------------------------------------------------------
 ;; ctags

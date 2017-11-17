@@ -2,6 +2,8 @@
 
 (setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))
 
+(desktop-save-mode 1)
+
 ;;--------------------------------------------------------------------------------
 ;; UC upplysningscentralen stuff
 (defun uc-notes ()
@@ -146,7 +148,9 @@
 (put 'upcase-region 'disabled nil)
 
 ;;(color-theme-midnight)
-(load-theme 'dracula t)
+;(load-theme 'dracula t)
+;(load-theme 'abyss t)
+(load-theme 'material t)
 
 ;;--------------------------------------------------------------------------------
 

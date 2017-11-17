@@ -246,8 +246,11 @@
 
 (require 'helm-config) 
 (helm-mode 1)
+(ido-mode 1)
+(ido-yes-or-no-mode 1)
 
 (global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "C-x b") 'ido-switch-buffer)
 (global-set-key (kbd "M-s s") 'helm-multi-swoop-all)
 (global-set-key (kbd "M-s S") 'helm-swoop)
 (global-set-key (kbd "M-s l") 'helm-ls-git-ls)

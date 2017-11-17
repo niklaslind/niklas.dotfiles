@@ -269,6 +269,13 @@
 (global-set-key (kbd "M-s M-m") 'helm-all-mark-rings)
 
 ;;--------------------------------------------------------------------------------
+;;smart-mode-line
+(sml/setup)
+(add-to-list 'sml/replacer-regexp-list '("^~/worklocal/uc/2016Q4_3_project/git/" ":UC-GIT:") t)
+;(powerline-default-theme)
+
+
+;;--------------------------------------------------------------------------------
 ;; tide, typescript
 (defun setup-tide-mode ()
   (interactive)
@@ -303,7 +310,7 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("dcf229d4673483cb7b38505360824fa56a0d7b52f54edbcdca98cf5059fa1662" "28ec8ccf6190f6a73812df9bc91df54ce1d6132f18b4c8fcc85d45298569eb53" "2a739405edf418b8581dcd176aaf695d319f99e3488224a3c495cb0f9fd814e3" default))))
+    ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "dcf229d4673483cb7b38505360824fa56a0d7b52f54edbcdca98cf5059fa1662" "28ec8ccf6190f6a73812df9bc91df54ce1d6132f18b4c8fcc85d45298569eb53" "2a739405edf418b8581dcd176aaf695d319f99e3488224a3c495cb0f9fd814e3" default))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -150,7 +150,9 @@
 ;;(color-theme-midnight)
 ;(load-theme 'dracula t)
 ;(load-theme 'abyss t)
-(load-theme 'material t)
+;(load-theme 'material t)
+;(load-theme 'moe-dark t)
+(load-theme 'wombat t)
 
 ;;--------------------------------------------------------------------------------
 
@@ -289,3 +291,17 @@
 ;;-------  end tide, typescript -------------------------------------------------------------------------
 
 
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("dcf229d4673483cb7b38505360824fa56a0d7b52f54edbcdca98cf5059fa1662" "28ec8ccf6190f6a73812df9bc91df54ce1d6132f18b4c8fcc85d45298569eb53" "2a739405edf418b8581dcd176aaf695d319f99e3488224a3c495cb0f9fd814e3" default))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

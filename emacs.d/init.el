@@ -2,7 +2,7 @@
 
 (setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))
 
-(desktop-save-mode 1)
+(setq visible-bell nil)
 
 ;;--------------------------------------------------------------------------------
 ;; UC upplysningscentralen stuff
@@ -10,6 +10,12 @@
    (interactive)
    (find-file "~/worklocal/uc/performance2016Q4/uc_worklog.org")
  )
+;;--------------------------------------------------------------------------------
+
+
+;;--------------------------------------------------------------------------------
+;; Tramp, faster
+(setq tramp-default-method "ssh")
 ;;--------------------------------------------------------------------------------
 
 
@@ -158,6 +164,7 @@
 
 ;; javascript and json
 ;; https://truongtx.me/2014/02/23/set-up-javascript-development-environment-in-emacs/
+(setq-default indent-tabs-mode nil)
 (setq js-indent-level 2)
 (setq-default js2-basic-offset 2)
 
@@ -207,10 +214,10 @@
 
 (autoload 'js2-mode "js2-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
-(global-set-key [f5] 'slime-js-reload)
-(add-hook 'js2-mode-hook
-          (lambda ()
-            (slime-js-minor-mode 1)))
+;; (global-set-key [f5] 'slime-js-reload)
+;; (add-hook 'js2-mode-hook
+;;           (lambda ()
+;;             (slime-js-minor-mode 1)))
 ;;(load-file "~/.emacs.d/setup-slime-js.el")
 
 ;;--------------------------------------------------------------------------------
@@ -245,7 +252,22 @@
  'org-babel-load-languages
  '((dot . t))) ; this line activates dot
 
+;;--------------------------------------------------------------------------------
+;; sh in org-mode
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((sh . t))) ; this line activates dot
 
+;;--------------------------------------------------------------------------------
+;; javascript in org-mode
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((js . t))) ; this line activates dot
+
+;;--------------------------------------------------------------------------------
+;; circular bullets in org-mode
+(require 'org-bullets)
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 ;;--------------------------------------------------------------------------------
 ;; fiplr fuzzy search file names
 
@@ -266,7 +288,10 @@
 (global-set-key (kbd "M-s S") 'helm-swoop)
 (global-set-key (kbd "M-s l") 'helm-ls-git-ls)
 (global-set-key (kbd "M-s a") 'helm-ag-project-root)
-(global-set-key (kbd "M-s M-m") 'helm-all-mark-rings)
+(global-set-key (kbd "M-s m") 'helm-mark-ring)
+(global-set-key (kbd "M-s M") 'helm-all-mark-rings)
+(global-set-key (kbd "M-s o") 'helm-occur)
+
 
 ;;--------------------------------------------------------------------------------
 ;;smart-mode-line
@@ -300,8 +325,15 @@
 ;; format options
 (setq tide-format-options '(:insertSpaceAfterFunctionKeywordForAnonymousFunctions t :placeOpenBraceOnNewLineForFunctions nil))
 
-;;-------  end tide, typescript -------------------------------------------------------------------------
+;; (require 'flycheck)
+;; (add-hook 'js-mode-hook
+;;           (lambda () (flycheck-mode t)))
 
+;;-------  end tide, typescript -------------------------------------------------------------------------
+;;override theme
+(set-cursor-color "lightgreen")
+
+;;--------------------------------------------------------------------------------
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.

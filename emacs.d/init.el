@@ -2,8 +2,6 @@
 
 (setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))
 
-(setq visible-bell nil)
-
 ;;--------------------------------------------------------------------------------
 ;; UC upplysningscentralen stuff
 (defun uc-notes ()
@@ -293,6 +291,7 @@
 (global-set-key (kbd "M-s o") 'helm-occur)
 
 
+
 ;;--------------------------------------------------------------------------------
 ;;smart-mode-line
 (sml/setup)
@@ -332,6 +331,7 @@
 ;;-------  end tide, typescript -------------------------------------------------------------------------
 ;;override theme
 (set-cursor-color "lightgreen")
+(setq visible-bell nil)
 
 ;;--------------------------------------------------------------------------------
 

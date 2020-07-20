@@ -1,5 +1,6 @@
 
 
+
 (setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))
 
 ;;--------------------------------------------------------------------------------
@@ -26,14 +27,20 @@
 ;; For emacsclient to connect to
 (setq server-socket-dir "~/.emacs.d/serversocket")
 
-(require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/"))
-(add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (package-initialize)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/"))
+(package-refresh-contents)
+
+;; (require 'package)
+;; (add-to-list 'package-archives
+;;              '("melpa" . "https://melpa.org/packages/"))
+;; (add-to-list 'package-archives
+;;              '("marmalade" . "http://marmalade-repo.org/packages/"))
+;; (add-to-list 'package-archives
+;;              '("melpa" . "http://melpa.milkbox.net/packages/") t)
+;; (package-initialize)
 
 
 ;;--------------------------------------------------------------------------------
@@ -75,34 +82,93 @@
 ;; (el-get 'sync)
 ;;; 
 
+
+
 ;;--------------------------------------------------------------------------------
+;; Org-mode
+;;--------------------------------------------------------------------------------
+
 ;; indent org-mode
 (add-hook 'org-mode-hook
           (lambda ()
             (org-indent-mode t))
           t)
 
+
+(setq org-agenda-custom-commands
+      '(("ces" "Custom: Agenda and Emacs SOMEDAY [#A] items"
+         ((org-ql-block '(or (todo "IDAG")
+                             (closed :on today))
+                             (:groups (priority))
+                        )
+          (agenda)))))
+
+
+(defun idagDone ()
+  (interactive)
+  (org-ql-view "idagDone")
+  )
+
 ;; org-mode agenda global key mappings
- (global-set-key "\C-cl" 'org-store-link)
-     (global-set-key "\C-cc" 'org-capture)
-     (global-set-key "\C-ca" 'org-agenda)
-     (global-set-key "\C-cb" 'org-iswitchb)
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-cb" 'org-iswitchb)
+(global-set-key "\C-cr" 'helm-org-rifle-agenda-files)
+(global-set-key "\C-ca" 'idagDone)
+;;(global-set-key "\C-ca" 'org-agenda)
 ;;broken: (setq org-default-notes-file (concat  org-directory "~/Dropbox/GTD/notes.org"))
+
+
+(setq org-tag-alist '(("@work" . ?w) ("@home" . ?h) ("stan" . ?s)))
+
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "IDAG(i)" "|" "DONE(d)")))
+
+(setq org-agenda-files (list
+                        "~/Dropbox/GTD/inbox.org"
+                        "~/Dropbox/GTD/home.org"
+                        "~/Dropbox/GTD/work.org"
+                        "~/Dropbox/GTD/brf.org"
+                        "~/Dropbox/GTD/coach.org"
+                        "~/Dropbox/GTD/habits.org"
+                        "~/Dropbox/GTD/readinglist.org"
+                        "~/Dropbox/GTD/journal-brf.org"
+                        "~/Dropbox/GTD/journal-work.org"
+                        "~/Dropbox/GTD/journal-art.org"                        
+                        "~/Dropbox/GTD/journal.org"                        
+                        ))
+
+(setq org-refile-targets '((org-agenda-files :maxlevel . 1)))
+(setq org-refile-use-outline-path 'file)
+(setq org-outline-path-complete-in-steps nil)
+(setq org-refile-allow-creating-parent-nodes 'confirm)
+
+(setq org-log-done t)
 
 ;; org-mode capture templates
 (setq org-capture-templates
-      '(("t" "Todo" entry (file+headline "~/Dropbox/GTD/notes.org" "Tasks")
+      '(("t" "Todo" entry (file+headline "~/Dropbox/GTD/inbox.org" "Tasks")
              "* TODO %?\n  %i\n  %a")
-        ("j" "Journal" entry (file+datetree "~/org/journal.org")
+        ("j" "Journal" entry (file+datetree "~/Dropbox/GTD/journal.org")
+             "* %?\nEntered on %U\n  %i\n  %a")
+        ("w" "Work journal" entry (file+datetree "~/Dropbox/GTD/journal-work.org")
+             "* %?\nEntered on %U\n  %i\n  %a")
+        ("b" "Brf journal" entry (file+datetree "~/Dropbox/GTD/journal-brf.org")
+             "* %?\nEntered on %U\n  %i\n  %a")
+        ("a" "Art journal" entry (file+datetree "~/Dropbox/GTD/journal-art.org")
              "* %?\nEntered on %U\n  %i\n  %a")))
 
 
-;; MObileOrg
-;;(setq org-directory "~/Dropbox/MobileOrg")
-(setq org-directory "~/Dropbox/GTD/org")
-(setq org-mobile-inbox-for-pull "~/Dropbox/GTD/org/from-mobile.org")
-(setq org-mobile-files (quote ("mobile.org")))
-(setq org-mobile-directory  "~/Dropbox/Apps/MobileOrg")
+;;org habit
+(with-eval-after-load 'org
+  (add-to-list 'org-modules 'org-habit t))
+(setq org-log-into-drawer t)
+
+
+;;org-reveal
+(require 'ox-reveal)
+
+
 
 ;;--------------------------------------------------------------------------------
 
@@ -114,7 +180,7 @@
 (defun today ()
    (interactive)
    (find-file "~/Dropbox/GTD/TODAY.org")
- )
+   )
 (defun worklog ()
    (interactive)
    (find-file "~/Dropbox/GTD/worklog.markdown")
@@ -178,13 +244,20 @@
 ;; fold blocks
 ;;--------------------------------------------------------------------------------
 ;; Show-hide
+;; (global-set-key (kbd "<C-return>") 'hs-toggle-hiding)
 ;; (global-set-key (kbd "") 'hs-show-block)
 ;; (global-set-key (kbd "") 'hs-show-all)
 ;; (global-set-key (kbd "") 'hs-hide-block)
-;; (global-set-key (kbd "") 'hs-hide-all)
+;; (global-set-key (kbd "<M-C-return>") 'hs-hide-all)
 
-(add-hook 'prog-mode-hook
-          (lambda () (yafolding-mode)))
+
+;; origami
+(global-set-key (kbd "<C-return>") 'origami-recursively-toggle-node)
+(global-set-key (kbd "") 'hs-show-block)
+
+
+;; (add-hook 'prog-mode-hook
+;;           (lambda () (yafolding-mode)))
 ;;--------------------------------------------------------------------------------
 
 ;;--------------------------------------------------------------------------------
@@ -205,7 +278,9 @@
 
 
 ;;--------------------------------------------------------------------------------
-
+;; git-gutter
+(custom-set-variables
+ '(git-gutter:update-interval 1))
 
 ;;--------------------------------------------------------------------------------
 ;; swank-js settings
@@ -279,9 +354,9 @@
 (helm-mode 1)
 (ido-mode 1)
 (ido-yes-or-no-mode 1)
-
 (global-set-key (kbd "M-x") 'helm-M-x)
-(global-set-key (kbd "C-x b") 'ido-switch-buffer)
+;;(global-set-key (kbd "C-x b") 'ido-switch-buffer)
+(global-set-key (kbd "C-x b") 'helm-buffers-list)
 (global-set-key (kbd "M-s s") 'helm-multi-swoop-all)
 (global-set-key (kbd "M-s S") 'helm-swoop)
 (global-set-key (kbd "M-s l") 'helm-ls-git-ls)
@@ -289,8 +364,16 @@
 (global-set-key (kbd "M-s m") 'helm-mark-ring)
 (global-set-key (kbd "M-s M") 'helm-all-mark-rings)
 (global-set-key (kbd "M-s o") 'helm-occur)
+(global-set-key (kbd "M-s b") 'helm-bookmarks)
 
 
+;;--------------------------------------------------------------------------------
+;; show matching parentheses
+(show-paren-mode 1)
+(setq show-paren-style 'parenthesis)
+;;(setq show-paren-style 'expression)
+
+;;--------------------------------------------------------------------------------
 
 ;;--------------------------------------------------------------------------------
 ;;smart-mode-line
@@ -333,6 +416,18 @@
 (set-cursor-color "lightgreen")
 (setq visible-bell nil)
 
+;;---------- flymake-json, jsonlint------------------------------------------------
+;; https://sdqali.in/blog/2013/07/31/validating-json-in-emacs/
+(setenv "PATH" (concat (getenv "PATH") ":/Users/nli/.nvm/versions/node/v8.6.0/bin"))
+(setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin/docker-compose"))
+(setq exec-path (append exec-path '("/Users/nli/.nvm/versions/node/v8.6.0/bin")))
+(setq exec-path (append exec-path '("/usr/local/bin/docker-compose")))
+
+
+
+
+;;----------- git ---------------------------------------------------------------------
+
 ;;--------------------------------------------------------------------------------
 
 (custom-set-variables
@@ -343,9 +438,117 @@
  '(custom-safe-themes
    (quote
     ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "dcf229d4673483cb7b38505360824fa56a0d7b52f54edbcdca98cf5059fa1662" "28ec8ccf6190f6a73812df9bc91df54ce1d6132f18b4c8fcc85d45298569eb53" "2a739405edf418b8581dcd176aaf695d319f99e3488224a3c495cb0f9fd814e3" default)))
+ '(org-ql-views
+   (quote
+    (("idagDone" :buffers-files
+      ("~/Dropbox/GTD/inbox.org" "~/Dropbox/GTD/home.org" "~/Dropbox/GTD/work.org" "~/Dropbox/GTD/brf.org" "~/Dropbox/GTD/coach.org" "~/Dropbox/GTD/readinglist.org")
+      :query
+      (or
+       (todo "IDAG")
+       (closed :on today))
+      :sort nil :narrow nil :super-groups
+      ((:auto-priority))
+      :title "idagDone")
+     ("idag" :buffers-files
+      ("~/Dropbox/GTD/inbox.org" "~/Dropbox/GTD/home.org" "~/Dropbox/GTD/work.org" "~/Dropbox/GTD/brf.org" "~/Dropbox/GTD/coach.org" "~/Dropbox/GTD/readinglist.org")
+      :query
+      (todo "IDAG")
+      :sort nil :narrow nil :super-groups
+      ((:auto-priority))
+      :title "idag")
+     ("Overview: Agenda-like" :buffers-files org-agenda-files :query
+      (and
+       (not
+        (done))
+       (or
+        (habit)
+        (deadline auto)
+        (scheduled :to today)
+        (ts-active :on today)))
+      :sort
+      (date)
+      :super-groups org-super-agenda-groups :title "Agenda-like")
+     ("Overview: NEXT tasks" :buffers-files org-agenda-files :query
+      (todo "NEXT")
+      :sort
+      (priority date)
+      :super-groups org-super-agenda-groups :title "Overview: NEXT tasks")
+     ("Calendar: Today" :buffers-files org-agenda-files :query
+      (ts-active :on today)
+      :title "Today" :super-groups org-super-agenda-groups :sort
+      (priority))
+     ("Calendar: This week" .
+      #[0 "\301 \302\303\304\305\304\306\304\307\310\301 \311!>\204 \312\313\314D\"\210\211\315H\204\232 \211\315\316\317\320\311!>\2048 \312\313\314D\"\210\321H\204\223 \321\322H\323H	\324H
+\325H\326H\327H\211
+\211\203\213 \203\213 \203\213 \203\213 \203\213 \203\213 \330\331
+&!\202\215 \330 \266\206\266\206I\210\321H\"!I\210\211\315H\262[
+#&\302\303\332\305\333\306\333\307\310\327\301 \311!>\204\300 \312\313\314D\"\210\211\315H\204>\211\315\316\317\320\311!>\204\334 \312\313\314D\"\210\321H\2047\321\322H\323H	\324H
+\325H\326H\327H\211
+\211\203/\203/\203/\203/\203/\203/\330\331
+&!\2021\330 \266\206\266\206I\210\321H\"!I\210\211\315H\262Z#&\334\335 \336\337\340\257\341\342\343\344\345\346&\207"
+          [cl-struct-ts-tags ts-now ts-apply :hour 0 :minute :second ts-adjust day type-of signal wrong-type-argument ts 7 string-to-number format-time-string "%w" 17 3 2 1 4 5 6 float-time encode-time 23 59 org-ql-search org-agenda-files ts-active :from :to :title "This week" :super-groups org-super-agenda-groups :sort
+                             (priority)]
+          40 "Show items with an active timestamp during this calendar week." nil])
+     ("Calendar: Next week" .
+      #[0 "\301\302\303\304 #\305\306\307\310\307\311\307\301\302\304 \312!>\204  \313\314\315D\"\210\211\303H\204\236 \211\303\316\317\320\312!>\204< \313\314\315D\"\210\321H\204\227 \321\322H\323H	\324H
+\325H\326H\327H\211
+\211\203\217 \203\217 \203\217 \203\217 \203\217 \203\217 \330\331
+&!\202\221 \330 \266\206\266\206I\210\321H\"!I\210\211\303H\262[
+#&\305\306\332\310\333\311\333\301\302\327\304 \312!>\204\304 \313\314\315D\"\210\211\303H\204B\211\303\316\317\320\312!>\204\340 \313\314\315D\"\210\321H\204;\321\322H\323H	\324H
+\325H\326H\327H\211
+\211\2033\2033\2033\2033\2033\2033\330\331
+&!\2025\330 \266\206\266\206I\210\321H\"!I\210\211\303H\262Z#&\334\335 \336\337\340\257\341\342\343\344\345\346&\207"
+          [cl-struct-ts-tags ts-adjust day 7 ts-now ts-apply :hour 0 :minute :second type-of signal wrong-type-argument ts string-to-number format-time-string "%w" 17 3 2 1 4 5 6 float-time encode-time 23 59 org-ql-search org-agenda-files ts-active :from :to :title "Next week" :super-groups org-super-agenda-groups :sort
+                             (priority)]
+          40 "Show items with an active timestamp during the next calendar week." nil])
+     ("Review: Recently timestamped" . org-ql-view-recent-items)
+     (#("Review: Dangling tasks" 0 22
+        (help-echo "Tasks whose ancestor is done"))
+      :buffers-files org-agenda-files :query
+      (and
+       (todo)
+       (ancestors
+        (done)))
+      :title
+      #("Review: Dangling tasks" 0 22
+        (help-echo "Tasks whose ancestor is done"))
+      :sort
+      (date priority todo)
+      :super-groups
+      ((:auto-parent t)))
+     (#("Review: Stale tasks" 0 19
+        (help-echo "Tasks without a timestamp in the past 2 weeks"))
+      :buffers-files org-agenda-files :query
+      (and
+       (todo)
+       (not
+        (ts :from -14)))
+      :title
+      #("Review: Stale tasks" 0 19
+        (help-echo "Tasks without a timestamp in the past 2 weeks"))
+      :sort
+      (date priority todo)
+      :super-groups
+      ((:auto-parent t)))
+     (#("Review: Stuck projects" 0 22
+        (help-echo "Tasks with sub-tasks but no NEXT sub-tasks"))
+      :buffers-files org-agenda-files :query
+      (and
+       (todo)
+       (descendants
+        (todo))
+       (not
+        (descendants
+         (todo "NEXT"))))
+      :title
+      #("Review: Stuck projects" 0 22
+        (help-echo "Tasks with sub-tasks but no NEXT sub-tasks"))
+      :sort
+      (priority date)
+      :super-groups org-super-agenda-groups))))
  '(package-selected-packages
    (quote
-    (yafolding yasnippet sml-mode org-bullets ido-yes-or-no helm auto-complete))))
+    (ox-reveal ob-restclient swiper-helm org-plus-contrib helm-org-rifle org-ql 0blayout git-gutter docker-compose-mode dockerfile-mode indium json-reformat restclient-helm restclient ob-http highlight-blocks rainbow-delimiters adoc-mode magit origami shell-pop eldoro org-pomodoro gtk-pomodoro-indicator helm-flyspell flycheck-demjsonlint flycheck flymake-json yaml-mode helm-swoop helm-ls-git ace-window helm-ag js2-mode yafolding yasnippet sml-mode org-bullets ido-yes-or-no helm auto-complete))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -95,27 +95,27 @@
           t)
 
 
-(setq org-agenda-custom-commands
-      '(("ces" "Custom: Agenda and Emacs SOMEDAY [#A] items"
-         ((org-ql-block '(or (todo "IDAG")
-                             (closed :on today))
-                             (:groups (priority))
-                        )
-          (agenda)))))
+;; (setq org-agenda-custom-commands
+;;       '(("ces" "Custom: Agenda and Emacs SOMEDAY [#A] items"
+;;          ((org-ql-block '(or (todo "IDAG")
+;;                              (closed :on today))
+;;                              (:groups (priority))
+;;                         )
+;;           (agenda)))))
 
+;; (defun idagDone ()
+;;   (interactive)
+;;   (org-ql-view "idagDone")
+;;   )
 
-(defun idagDone ()
-  (interactive)
-  (org-ql-view "idagDone")
-  )
 
 ;; org-mode agenda global key mappings
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-iswitchb)
 (global-set-key "\C-cr" 'helm-org-rifle-agenda-files)
-(global-set-key "\C-ca" 'idagDone)
-;;(global-set-key "\C-ca" 'org-agenda)
+;;(global-set-key "\C-ca" 'idagDone)
+(global-set-key "\C-ca" 'org-agenda)
 ;;broken: (setq org-default-notes-file (concat  org-directory "~/Dropbox/GTD/notes.org"))
 
 

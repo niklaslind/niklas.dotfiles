@@ -430,125 +430,7 @@
 
 ;;--------------------------------------------------------------------------------
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "dcf229d4673483cb7b38505360824fa56a0d7b52f54edbcdca98cf5059fa1662" "28ec8ccf6190f6a73812df9bc91df54ce1d6132f18b4c8fcc85d45298569eb53" "2a739405edf418b8581dcd176aaf695d319f99e3488224a3c495cb0f9fd814e3" default)))
- '(org-ql-views
-   (quote
-    (("idagDone" :buffers-files
-      ("~/Dropbox/GTD/inbox.org" "~/Dropbox/GTD/home.org" "~/Dropbox/GTD/work.org" "~/Dropbox/GTD/brf.org" "~/Dropbox/GTD/coach.org" "~/Dropbox/GTD/readinglist.org")
-      :query
-      (or
-       (todo "IDAG")
-       (closed :on today))
-      :sort nil :narrow nil :super-groups
-      ((:auto-priority))
-      :title "idagDone")
-     ("idag" :buffers-files
-      ("~/Dropbox/GTD/inbox.org" "~/Dropbox/GTD/home.org" "~/Dropbox/GTD/work.org" "~/Dropbox/GTD/brf.org" "~/Dropbox/GTD/coach.org" "~/Dropbox/GTD/readinglist.org")
-      :query
-      (todo "IDAG")
-      :sort nil :narrow nil :super-groups
-      ((:auto-priority))
-      :title "idag")
-     ("Overview: Agenda-like" :buffers-files org-agenda-files :query
-      (and
-       (not
-        (done))
-       (or
-        (habit)
-        (deadline auto)
-        (scheduled :to today)
-        (ts-active :on today)))
-      :sort
-      (date)
-      :super-groups org-super-agenda-groups :title "Agenda-like")
-     ("Overview: NEXT tasks" :buffers-files org-agenda-files :query
-      (todo "NEXT")
-      :sort
-      (priority date)
-      :super-groups org-super-agenda-groups :title "Overview: NEXT tasks")
-     ("Calendar: Today" :buffers-files org-agenda-files :query
-      (ts-active :on today)
-      :title "Today" :super-groups org-super-agenda-groups :sort
-      (priority))
-     ("Calendar: This week" .
-      #[0 "\301 \302\303\304\305\304\306\304\307\310\301 \311!>\204 \312\313\314D\"\210\211\315H\204\232 \211\315\316\317\320\311!>\2048 \312\313\314D\"\210\321H\204\223 \321\322H\323H	\324H
-\325H\326H\327H\211
-\211\203\213 \203\213 \203\213 \203\213 \203\213 \203\213 \330\331
-&!\202\215 \330 \266\206\266\206I\210\321H\"!I\210\211\315H\262[
-#&\302\303\332\305\333\306\333\307\310\327\301 \311!>\204\300 \312\313\314D\"\210\211\315H\204>\211\315\316\317\320\311!>\204\334 \312\313\314D\"\210\321H\2047\321\322H\323H	\324H
-\325H\326H\327H\211
-\211\203/\203/\203/\203/\203/\203/\330\331
-&!\2021\330 \266\206\266\206I\210\321H\"!I\210\211\315H\262Z#&\334\335 \336\337\340\257\341\342\343\344\345\346&\207"
-          [cl-struct-ts-tags ts-now ts-apply :hour 0 :minute :second ts-adjust day type-of signal wrong-type-argument ts 7 string-to-number format-time-string "%w" 17 3 2 1 4 5 6 float-time encode-time 23 59 org-ql-search org-agenda-files ts-active :from :to :title "This week" :super-groups org-super-agenda-groups :sort
-                             (priority)]
-          40 "Show items with an active timestamp during this calendar week." nil])
-     ("Calendar: Next week" .
-      #[0 "\301\302\303\304 #\305\306\307\310\307\311\307\301\302\304 \312!>\204  \313\314\315D\"\210\211\303H\204\236 \211\303\316\317\320\312!>\204< \313\314\315D\"\210\321H\204\227 \321\322H\323H	\324H
-\325H\326H\327H\211
-\211\203\217 \203\217 \203\217 \203\217 \203\217 \203\217 \330\331
-&!\202\221 \330 \266\206\266\206I\210\321H\"!I\210\211\303H\262[
-#&\305\306\332\310\333\311\333\301\302\327\304 \312!>\204\304 \313\314\315D\"\210\211\303H\204B\211\303\316\317\320\312!>\204\340 \313\314\315D\"\210\321H\204;\321\322H\323H	\324H
-\325H\326H\327H\211
-\211\2033\2033\2033\2033\2033\2033\330\331
-&!\2025\330 \266\206\266\206I\210\321H\"!I\210\211\303H\262Z#&\334\335 \336\337\340\257\341\342\343\344\345\346&\207"
-          [cl-struct-ts-tags ts-adjust day 7 ts-now ts-apply :hour 0 :minute :second type-of signal wrong-type-argument ts string-to-number format-time-string "%w" 17 3 2 1 4 5 6 float-time encode-time 23 59 org-ql-search org-agenda-files ts-active :from :to :title "Next week" :super-groups org-super-agenda-groups :sort
-                             (priority)]
-          40 "Show items with an active timestamp during the next calendar week." nil])
-     ("Review: Recently timestamped" . org-ql-view-recent-items)
-     (#("Review: Dangling tasks" 0 22
-        (help-echo "Tasks whose ancestor is done"))
-      :buffers-files org-agenda-files :query
-      (and
-       (todo)
-       (ancestors
-        (done)))
-      :title
-      #("Review: Dangling tasks" 0 22
-        (help-echo "Tasks whose ancestor is done"))
-      :sort
-      (date priority todo)
-      :super-groups
-      ((:auto-parent t)))
-     (#("Review: Stale tasks" 0 19
-        (help-echo "Tasks without a timestamp in the past 2 weeks"))
-      :buffers-files org-agenda-files :query
-      (and
-       (todo)
-       (not
-        (ts :from -14)))
-      :title
-      #("Review: Stale tasks" 0 19
-        (help-echo "Tasks without a timestamp in the past 2 weeks"))
-      :sort
-      (date priority todo)
-      :super-groups
-      ((:auto-parent t)))
-     (#("Review: Stuck projects" 0 22
-        (help-echo "Tasks with sub-tasks but no NEXT sub-tasks"))
-      :buffers-files org-agenda-files :query
-      (and
-       (todo)
-       (descendants
-        (todo))
-       (not
-        (descendants
-         (todo "NEXT"))))
-      :title
-      #("Review: Stuck projects" 0 22
-        (help-echo "Tasks with sub-tasks but no NEXT sub-tasks"))
-      :sort
-      (priority date)
-      :super-groups org-super-agenda-groups))))
- '(package-selected-packages
-   (quote
-    (ox-reveal ob-restclient swiper-helm org-plus-contrib helm-org-rifle org-ql 0blayout git-gutter docker-compose-mode dockerfile-mode indium json-reformat restclient-helm restclient ob-http highlight-blocks rainbow-delimiters adoc-mode magit origami shell-pop eldoro org-pomodoro gtk-pomodoro-indicator helm-flyspell flycheck-demjsonlint flycheck flymake-json yaml-mode helm-swoop helm-ls-git ace-window helm-ag js2-mode yafolding yasnippet sml-mode org-bullets ido-yes-or-no helm auto-complete))))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

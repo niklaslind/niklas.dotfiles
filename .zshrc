@@ -126,6 +126,9 @@ export AWS_SECRET_KEY=G6J7oAjhAj4Ee+czpTePxfRJDwEZxL0SZzjXdpPK
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
 
+
+alias asciidoc_generate="asciidoctor -a icons=font"
+
 ### git-log-compact https://mackyle.github.io/git-log-compact/
 ln -sf  /Users/nli/worklocal/git-log-compact/git-log-compact  /Users/nli/bin/git-log-compact
 
@@ -152,6 +155,24 @@ eval "$(pyenv init -)"
 #pyenv shell 3.9.5
 #--------------------------------------------------------------------------------
 
+
+#--------------------------------------------------------------------------------
+# pet
+#
+
+function pet-select() {
+  BUFFER=$(pet search --query "$LBUFFER")
+  CURSOR=$#BUFFER
+  zle redisplay
+}
+zle -N pet-select
+stty -ixon
+bindkey '^s' pet-select
+
+#--------------------------------------------------------------------------------
+
+
+
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$('/Users/nli/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
@@ -168,15 +189,14 @@ unset __conda_setup
 # <<< conda initialize <<<
 
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/nli/worklocal/google-cloud/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/nli/worklocal/google-cloud/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/nli/worklocal/google-cloud/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/nli/worklocal/google-cloud/google-cloud-sdk/completion.zsh.inc'; fi
-
 #------------
 # Doom emacs
 export PATH="$PATH:/Users/nli/.config/emacs/bin"
+# Put proivate bin last in path
+export PATH="$PATH:/Users/nli/bin"
+# gem install, for example asciidoctor
+export PATH="$PATH:/Users/nli/.gem/ruby/2.6.0/bin"
+
 #------------
 
 autoload -Uz compinit
@@ -187,3 +207,21 @@ fpath+=~/.zfunc
 
 
 
+
+# Added by Windsurf
+export PATH="/Users/nli/.codeium/windsurf/bin:$PATH"
+
+export OPENROUTER_API_KEY="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"
+export GEMINI_API_KEY="AIzaSyAacW_HW5yV6_WtjeqAnuDOImooTafYhSY"
+
+
+alias chrome='open  -a "Google Chrome"'
+
+# Added by Antigravity
+export PATH="/Users/nli/.antigravity/antigravity/bin:$PATH"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/nli/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/nli/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/nli/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/nli/Downloads/google-cloud-sdk/completion.zsh.inc'; fi

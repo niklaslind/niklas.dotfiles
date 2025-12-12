@@ -54,7 +54,10 @@
 ;; --------------------------------------------------------------------------------
 (package! key-chord)
 (package! ox-reveal)
+(package! ox-json)
 (package! org-roam-ui)
+(package! org-ql)
+(package! helm-org-ql)
 (package! helm-rg)
 (package! helm-org-rifle)
 (package! discover-my-major)
@@ -62,3 +65,12 @@
 (package! major-mode-hydra)
 (package! pretty-hydra)
 (package! ox-reveal)
+(package! gptel)
+(package! company-jedi)
+(package! adoc-mode)
+(package! org-super-agenda)
+(package! straight)
+(package! aidermacs)
+(package! feature-mode)
+;;(package! copilot
+;;  :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el" "dist")))

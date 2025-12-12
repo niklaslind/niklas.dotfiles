@@ -219,7 +219,7 @@
              org-roam-dailies-yesterday)
   :preface
   ;; Set this to nil so we can later detect whether the user has set a custom
-  ;; directory for it, and default to `org-directory' if they haven't.
+  ;; directory for it, and default to `org-directory' if they haven't.?
   (defvar org-roam-directory "~/Dropbox/GTD/roam")
 
   :init

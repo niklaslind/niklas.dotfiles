@@ -40,7 +40,7 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
+;;(setq org-directory "~/org/")
 
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
@@ -111,6 +111,7 @@
 
 
 
+
 ;;--------------------------------------------------------------------------------
 ;; Org-mode
 ;;--------------------------------------------------------------------------------
@@ -134,6 +135,7 @@
   (setq org-nli-journal-file (expand-file-name "journal-nli.org"))
   (setq org-atilia-journal-file (expand-file-name "journal-atilia.org"))
   (setq org-uc-journal-file (expand-file-name "journal-uc.org"))
+  (setq org-aivision-journal-file (expand-file-name "journal-aivision.org"))
   (setq org-brf-journal-file (expand-file-name "journal-brf.org"))
   (setq org-mm-journal-file (expand-file-name "journal-mm.org"))
   (setq org-elastx-journal-file (expand-file-name "journal-elastx.org"))
@@ -148,6 +150,7 @@
 (set-register ?n (cons 'file org-nli-journal-file))
 (set-register ?a (cons 'file org-atilia-journal-file))
 (set-register ?u (cons 'file org-uc-journal-file))
+(set-register ?i (cons 'file org-aivision-journal-file))
 (set-register ?b (cons 'file org-brf-journal-file))
 (set-register ?m (cons 'file org-mm-journal-file))
 (set-register ?e (cons 'file org-elastx-journal-file))
@@ -193,6 +196,9 @@
         ))
 
 
+(org-super-agenda-mode)
+
+
 ;;--------------------------------------------------------------------------------
 ;; Org-capture templates
 ;;--------------------------------------------------------------------------------
@@ -209,6 +215,10 @@
 
         ("u" "UC journal" entry
          (file+datetree org-uc-journal-file)
+         "* %T %?" :jump-to-captured 1)
+
+        ("i" "AIVision journal" entry
+         (file+datetree org-aivision-journal-file)
          "* %T %?" :jump-to-captured 1)
 
         ("a" "Atilia journal" entry
@@ -359,20 +369,23 @@
   :bind ("M-o" . my-hydra/body))
 
 (defun backlogPath (filename)
-  (find-file (concat "~/Dropbox/emacs-org/deft/" filename)))
+  (persp-switch 'org)
+  (find-file (concat "~/Dropbox/emacs-org/deft/" filename))
+  )
 
 (pretty-hydra-define my-hydra
-  (:color green :quit-key "q" :title "My org")
+  (:color green :quit-key "q" :exit t :title "My org")
 
   ("Backlogs"
    (
     ("c" (backlogPath "backlog-inbox.org") "backlog-inbox.org")
     ("n" (backlogPath "backlog-nli.org") "backlog-nli.org")
-    ("k" (backlogPath "backlog-rune.org") "backlog-rune.org")
     ("u" (backlogPath "backlog-uc.org") "backlog-uc.org")
+    ("i" (backlogPath "backlog-aivision.org") "backlog-aivision.org")
     ("a" (backlogPath "backlog-atilia.org") "backlog-atilia.org")
     ("b" (backlogPath "backlog-brf.org") "backlog-brf.org")
     ("e" (backlogPath "backlog-elastx.org") "backlog-elastx.org")
+    ("k" (backlogPath "backlog-rune.org") "backlog-rune.org")
     ("m" (backlogPath "backlog-mm.org") "backlog-mm.org")
     ("h" (backlogPath "backlog-habit.org") "backlog-habit.org")
     ("s" (backlogPath "backlog-snoken.org") "backlog-snoken.org")
@@ -383,9 +396,10 @@
    (
     ("N" (find-file org-nli-journal-file) "org-nli-journal-file")
     ("U" (find-file org-uc-journal-file) "org-uc-journal-file")
-    ("K" (find-file org-k2c-journal-file) "org-k2c-journal-file")
-    ("E" (find-file org-elastx-journal-file) "org-elastx-journal-file")
+    ("I" (find-file org-aivision-journal-file) "org-aivision-journal-file")
     ("A" (find-file org-atilia-journal-file) "org-atilia-journal-file")
+    ("E" (find-file org-elastx-journal-file) "org-elastx-journal-file")
+    ("K" (find-file org-k2c-journal-file) "org-k2c-journal-file")
     ("M" (find-file org-mm-journal-file) "org-mm-journal-file")
     ("B" (find-file org-brf-journal-file) "org-brf-journal-file")
     )
@@ -401,3 +415,131 @@
     )
    ))
 
+;;--------------------------------------------------------------------------------
+;; gptel llm client
+;; --------------------------------------------------------------------------------
+
+(use-package! gptel
+ :config
+ )
+
+(gptel-make-ollama
+ "Ollama"
+ :host "localhost:11434"
+ :models '("mistral:latest")
+ :stream t)
+
+
+;;--------------------------------------------------------------------------------
+;; python
+;; --------------------------------------------------------------------------------
+(setq python-shell-interpreter "python3"
+      python-shell-interpreter-args "-i")
+
+
+;;--------------------------------------------------------------------------------
+;; gptel
+;;--------------------------------------------------------------------------------
+(setq gptel-api-key "")
+
+
+;;--------------------------------------------------------------------------------
+;; org-speed-commands
+;;--------------------------------------------------------------------------------
+(progn
+  (defun boundary ()
+    (and      (= (char-syntax (char-after))  ?w)
+         (not (= (char-syntax (char-before)) ?w))))
+  (defun my-forward-word ()
+    (interactive)
+    (while (progn (forward-char)  (not (boundary)))))
+  (defun my-backward-word ()
+    (interactive)
+    (while (progn (backward-char) (not (boundary)))))
+  (global-set-key [M-right] 'my-forward-word)
+  (global-set-key [M-left]  'my-backward-word)
+  )
+
+;;--------------------------------------------------------------------------------
+;; org-ql
+;;--------------------------------------------------------------------------------
+(use-package org-ql)
+
+
+
+;;--------------------------------------------------------------------------------
+;; copilot
+;; https://www.irfanhabib.com/2022-04-26-setting-up-github-copilot-in-emacs/
+;;--------------------------------------------------------------------------------
+
+;; accept completion from copilot and fallback to company
+;; (use-package! copilot
+;;   :hook (prog-mode . copilot-mode)
+;;   :bind (:map copilot-completion-map
+;;               ("C-M-<return>" . 'copilot-accept-completion)
+;;               ("C-M-RET" . 'copilot-accept-completion)
+;;               ("C-TAB" . 'copilot-accept-completion-by-word)
+;;               ("C-<tab>" . 'copilot-accept-completion-by-word)))
+
+
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((plantuml . t)))
+    ;; Sample jar configuration
+    ;; (setq plantuml-jar-path "/path/to/your/copy/of/plantuml.jar")
+    ;; (setq plantuml-default-exec-mode 'jar)
+
+    ;; Sample executable configuration
+    (setq plantuml-executable-path "~/bin/plantuml.sh")
+    (setq plantuml-default-exec-mode 'executable)
+
+
+(defadvice! +workspaces-remove-dead-buffers-a (persp)
+  :before #'persp-buffers-to-savelist
+  (when (persp-p persp)
+    (setf (persp-buffers persp)
+          (cl-remove-if-not #'buffer-live-p
+                            (persp-buffers persp)))))
+
+
+;;--------------------------------------------------------------------------------
+;; ob-http, org-babel http
+;;--------------------------------------------------------------------------------
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+   (http . t)))
+
+
+(delete-selection-mode 1)
+
+;;--------------------------------------------------------------------------------
+;;  aidermacs, aider, AI agent
+;;--------------------------------------------------------------------------------
+
+(use-package aidermacs
+  :bind (("C-c C-a" . aidermacs-transient-menu))
+  :config
+  ; Set API_KEY in .bashrc, that will automatically picked up by aider or in elisp
+
+  :custom
+  ; See the Configuration section below
+  (aidermacs-default-chat-mode 'architect)
+  (aidermacs-default-model "gemini"))
+(setq aidermacs-watch-files t)
+
+
+
+;;--------------------------------------------------------------------------------
+;; cucumber feature files
+;;--------------------------------------------------------------------------------
+
+(use-package! feature-mode
+  :mode "\\.feature$")
+
+
+(advice-add '+workspace-get :around
+  (lambda (orig name &optional create)
+    (funcall orig (if (symbolp name) (symbol-name name) name) create)))

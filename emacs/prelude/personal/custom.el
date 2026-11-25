@@ -51,12 +51,17 @@
 
 
 ;;--------------------------------------------------------------------------------
-;; Niklas' org-mode configuration lives in nli-org-mode.el
+;; Niklas' org-mode configuration.
+;; Switch by commenting/uncommenting ONE of the lines below:
+;;   nli-org-mode = stable, known-working config (fall-back)
+;;   ai-org-mode  = experimental next-generation AI-aware config
 ;;--------------------------------------------------------------------------------
-(add-to-list 'load-path (file-name-directory (or load-file-name
-                                                 buffer-file-name))
-             t)
+(let ((personal-dir (file-name-directory (or load-file-name
+                                             buffer-file-name))))
+  (add-to-list 'load-path personal-dir t)
+  (add-to-list 'load-path (expand-file-name "org-configs" personal-dir) t))
 (require 'nli-org-mode)
+;; (require 'ai-org-mode)
 ;;--------------------------------------------------------------------------------
 
 

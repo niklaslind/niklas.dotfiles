@@ -60,8 +60,8 @@
                                              buffer-file-name))))
   (add-to-list 'load-path personal-dir t)
   (add-to-list 'load-path (expand-file-name "org-configs" personal-dir) t))
-(require 'nli-org-mode)
-;; (require 'ai-org-mode)
+;;(require 'nli-org-mode)
+(require 'ai-org-mode)
 ;;--------------------------------------------------------------------------------
 
 

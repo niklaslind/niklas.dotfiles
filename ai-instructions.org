@@ -1,0 +1,14 @@
+* purpose
+
+This folder holds my emacs-configs
+Parallell to this I'm setting up a personal AI-agent that works w org-mode
+goal is to have personal and ai org-mode-files for todo and journals
+so that I can refile my TODOs to AI and read AI-journal-files while still have my own files.
+This work is in progress and I am iteratively finding the forms.
+So I need to keep my old config while experimenting with new. so that I can switch.
+
+* TODO-list
+
+** DONE refacture emacs-config into current and ai
+- break-out all org-mode-config into a separate nli-org-mode.el and import it from custom.el
+- CLOSED: [2026-11-25 Wed]

@@ -22,17 +22,53 @@
 ;; Org-mode
 ;;--------------------------------------------------------------------------------
 
+(defconst org-org-mode-root "~/worklocal/202609_personal_tracker/org-mode"
+  "Root directory for the AI-mode org files (ai/ and nli/ subdirectories).")
+
+;; AI files
+(defvar org-ai-todo-file
+  (expand-file-name "ai/ai-todo.org" org-org-mode-root)
+  "AI todo file.")
+(defvar org-ai-journal-file
+  (expand-file-name "ai/ai-journal.org" org-org-mode-root)
+  "AI journal file.")
+(defvar org-ai-instructions-file
+  (expand-file-name "ai/ai-instructions.org" org-org-mode-root)
+  "AI instructions file.")
+
+;; nli files
+(defvar org-nli-backlog-file
+  (expand-file-name "nli/backlog-nli.org" org-org-mode-root)
+  "nli backlog file.")
+(defvar org-nli-journal-file
+  (expand-file-name "nli/journal-nli.org" org-org-mode-root)
+  "nli journal file.")
+(defvar org-atilia-journal-file
+  (expand-file-name "nli/journal-atilia.org" org-org-mode-root)
+  "Atilia journal file.")
+(defvar org-brf-journal-file
+  (expand-file-name "nli/journal-brf.org" org-org-mode-root)
+  "BRF journal file.")
+(defvar org-mm-journal-file
+  (expand-file-name "nli/journal-mm.org" org-org-mode-root)
+  "Machine Matadors journal file.")
+(defvar org-snoken-journal-file
+  (expand-file-name "nli/journal-snoken.org" org-org-mode-root)
+  "Snoken journal file.")
+(defvar org-readinglist-file
+  (expand-file-name "nli/readinglist.org" org-org-mode-root)
+  "Reading list file.")
+
 (setq org-agenda-files
-      '("~/worklocal/202609_personal_tracker/ai-journal.org"
-        "~/worklocal/202609_personal_tracker/ai-todo.org"
-        "/Users/nli/Dropbox/emacs-org/deft/backlog-atilia.org"
-        "/Users/nli/Dropbox/emacs-org/deft/backlog-brf.org"
-        "/Users/nli/Dropbox/emacs-org/deft/backlog-inbox.org"
-        "/Users/nli/Dropbox/emacs-org/deft/backlog-mm.org"
-        "/Users/nli/Dropbox/emacs-org/deft/backlog-nli.org"
-        "/Users/nli/Dropbox/emacs-org/deft/nli2.org"
-        "/Users/nli/Dropbox/emacs-org/deft/qfish.org"
-        "/Users/nli/Dropbox/emacs-org/deft/readinglist.org"))
+      (list org-ai-todo-file
+            org-ai-journal-file
+            org-nli-backlog-file
+            org-nli-journal-file
+            org-atilia-journal-file
+            org-brf-journal-file
+            org-mm-journal-file
+            org-snoken-journal-file
+            org-readinglist-file))
 
 (windmove-mode -1) ;;This overrides som org-mode keys like S-up
 
@@ -41,16 +77,6 @@
 (with-eval-after-load 'org
   (define-key org-mode-map (kbd "C-<right>") #'org-shiftright)
   (define-key org-mode-map (kbd "C-<left>")  #'org-shiftleft))
-
-(let ((default-directory "~/Dropbox/emacs-org/journals"))
-  (setq org-nli-journal-file (expand-file-name "journal-nli.org"))
-  (setq org-atilia-journal-file (expand-file-name "journal-atilia.org"))
-  (setq org-brf-journal-file (expand-file-name "journal-brf.org"))
-  (setq org-mm-journal-file (expand-file-name "journal-mm.org"))
-  (setq org-snoken-journal-file (expand-file-name "journal-snoken.org"))
-  )
-(setq org-inbox-file  "~/Dropbox/emacs-org/deft/backlog-inbox.org")
-
 
 (setq org-refile-targets '((org-agenda-files :maxlevel . 2)))
 (setq org-refile-use-outline-path 'file)
@@ -69,19 +95,14 @@
 (setq org-overriding-columns-format "%6TODO %2PRIORITY %100ITEM 100%ALLTAGS")
 (setq org-agenda-view-columns-initially t)
 (setq org-agenda-custom-commands
-      '(
-        ("Z" "Month" tags-todo "month")
+      '(("Z" "Month" tags-todo "month")
         ("z" "Zen next" todo "NEXT")
-        ))
-(org-super-agenda-mode)
-
-
-(setq org-agenda-custom-commands
-      '(("ab" "Viktiga uppgifter (A och B)"
+        ("ab" "Viktiga uppgifter (A och B)"
          ((tags "+PRIORITY<=\"D\""
-                     ((org-agenda-overriding-header "Prioritet A & B (sorterat)")
-                      (org-agenda-sorting-strategy '(priority-down)))))
-         ((org-agenda-files '("~/Dropbox/emacs-org/deft/backlog-nli.org")   )))))
+                ((org-agenda-overriding-header "Prioritet A & B (sorterat)")
+                 (org-agenda-sorting-strategy '(priority-down)))))
+         ((org-agenda-files (list org-nli-backlog-file))))))
+(org-super-agenda-mode)
 
 
 
@@ -94,10 +115,6 @@
 
 (setq org-capture-templates
       '(
-        ("C" "Todo" entry
-         (file+headline  org-inbox-file "Tasks")
-         "* TODO %t %?")
-
         ("n" "nli journal" entry
          (file+datetree org-nli-journal-file)
          "* %T %?" :jump-to-captured 1)
@@ -118,9 +135,13 @@
          (file+datetree org-atilia-journal-file)
          "* %T %?" :jump-to-captured 1)
 
-        ("i" "AI journal" entry
-         (file+datetree "~/worklocal/202609_personal_tracker/ai-journal.org")
-         "* %T %?" :jump-to-captured 1)
+        ("l" "nli backlog" entry
+         (file+headline org-nli-backlog-file "backlog")
+         "* TODO %?")
+
+        ("t" "AI backlog" entry
+         (file+headline org-ai-todo-file "INBOX")
+         "* TODO %?")
 
         )
       )
@@ -155,46 +176,33 @@
   :defer 2
   :bind ("M-o" . my-hydra/body))
 
-(defun backlogPath (filename)
-  (find-file (concat "~/Dropbox/emacs-org/deft/" filename))
-  )
-
-
-
 (pretty-hydra-define my-hydra
   (:color green :quit-key "q" :exit t :title "My org")
 
-  ("AI"
+  (
+   "agenda & capture"
    (
-    ("at" (find-file org-nli-journal-file) "ai-todo")
-    ("aj" (find-file org-nli-journal-file) "ai-journal")
-    )
-   "Backlogs"
-   (
-    ("c" (backlogPath "backlog-inbox.org") "backlog-inbox.org")
-    ("n" (backlogPath "backlog-nli.org") "backlog-nli.org")
-    ("aa" (backlogPath "backlog-atilia.org") "backlog-atilia.org")
-    ("b" (backlogPath "backlog-brf.org") "backlog-brf.org")
-    ("m" (backlogPath "backlog-mm.org") "backlog-mm.org")
-    ("s" (backlogPath "backlog-snoken.org") "backlog-snoken.org")
-    )
-   "Journals"
-   (
-    ("N" (find-file org-nli-journal-file) "org-nli-journal-file")
-    ("A" (find-file org-atilia-journal-file) "org-atilia-journal-file")
-    ("M" (find-file org-mm-journal-file) "org-mm-journal-file")
-    ("B" (find-file org-brf-journal-file) "org-brf-journal-file")
-    ("S" (find-file org-snoken-journal-file) "org-snoken-journal-file")
-    )
-   "Agenda"
-   (
+    ("C" org-capture "Capture")
     ("z" (org-agenda nil "z") "NEXT")
     )
-   "Other"
+   "nli-backlogs"
    (
-    ("r" (backlogPath "readinglist.org") "readinglist.org")
-    ("C" org-capture "Capture")
-    ("q" nil "Quit")
+    ("n" (find-file org-nli-backlog-file) "backlog-nli")
+    ("r" (find-file org-readinglist-file) "readinglist")
+    )
+   "nli-journals"
+   (
+    ("N" (find-file org-nli-journal-file) "journal-nli")
+    ("A" (find-file org-atilia-journal-file) "journal-atilia")
+    ("B" (find-file org-brf-journal-file) "journal-brf")
+    ("M" (find-file org-mm-journal-file) "journal-mm")
+    ("S" (find-file org-snoken-journal-file) "journal-snoken")
+    )
+   "AI"
+   (
+    ("t" (find-file org-ai-todo-file) "ai-todo")
+    ("j" (find-file org-ai-journal-file) "ai-journal")
+    ("i" (find-file org-ai-instructions-file) "ai-instructions")
     )
    ))
 
